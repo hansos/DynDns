@@ -6,6 +6,9 @@ The tool can be useful if you are running a globally available server on a netwo
 ## Requirements
 
 - The solution can be installed and executed on Linux and Windows systems only.
+- A valid AWS account is needed.
+- A Zone record for the domain and necessary zone records must be defined using the aws client or the aws web console.
+- The aws client must be installed on the machine, and should be initiated with Access Key and a secret key.
 
 ## Installation
 
@@ -32,7 +35,10 @@ Z053464332EXGH6TGNB6C; myservice.myserver.net.;
 Z053464332EXGH6TGNB6C; esogame.myserver.net.;
 ```
 
-*Ensure that each zone ends with a dot!*
+A line starting with a Hash (#) will be treated as a comment line.
+
+> [!NOTE]
+> Ensure that each zone name ends with a dot!
 
 ## Version history
 
@@ -44,4 +50,5 @@ Z053464332EXGH6TGNB6C; esogame.myserver.net.;
 
 - Submit path to data file directory as command line arguments.
 - Submit path to log file directory as command line arguments.
-- Add the final dot to zone record names automatically if not specified in the zones.dat file. 
+- Add the final dot to zone record names automatically if not specified in the zones.dat file.
+- Create the dyndns.dat file if it doesn't exists.
