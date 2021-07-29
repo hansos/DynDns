@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynDns", "DynDns\DynDns.csproj", "{547A01AB-CC33-4EF8-B2AD-376DE6427B9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D79C6952-DBE9-48FD-B17A-570CE59D8134}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{547A01AB-CC33-4EF8-B2AD-376DE6427B9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{547A01AB-CC33-4EF8-B2AD-376DE6427B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{547A01AB-CC33-4EF8-B2AD-376DE6427B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{547A01AB-CC33-4EF8-B2AD-376DE6427B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {478C8E88-E7DC-49B3-9DD5-73015287C8D6}
+	EndGlobalSection
+EndGlobal
