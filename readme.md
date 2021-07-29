@@ -1,4 +1,4 @@
-# DynDns 
+# DynDns
 
 A tool for updating AWS Route 53 Hosted Zone records with a computer's global IP.
 The tool can be useful if you are running a globally available server on a network without a statist IP address.
@@ -11,12 +11,28 @@ The tool can be useful if you are running a globally available server on a netwo
 
 ### On Linux servers
 
-The executable(s) must be installed in */opt/dyndns* together with the *dyndns.dat* and *zones.dat* files.
+The executable(s) must be installed in **/opt/dyndns** together with the **dyndns.dat** and **zones.dat** files.
 
 ### On Windows servers
 
-The executable *dyndns.exe* can be installed in any directory.  
-The data files *dyndns.dat* and *zones.dat* files must be installed in the same directory as the executable.
+The executable **dyndns.exe** can be installed in any directory.  
+The data files **dyndns.dat** and *zones.dat* files must be installed in the same directory as the executable.
+
+## Data files
+
+### dyndns.dat
+
+### zones.dat
+
+A semicolon separated data file with all zone records that should be updated with the current IP of the computer.  
+The file must contain the AWS as well as the zone record name.
+
+```csharp
+Z053464332EXGH6TGNB6C; myservice.myserver.net.;
+Z053464332EXGH6TGNB6C; esogame.myserver.net.;
+```
+
+*Ensure that each zone ends with a dot!*
 
 ## Version history
 
@@ -28,3 +44,4 @@ The data files *dyndns.dat* and *zones.dat* files must be installed in the same 
 
 - Submit path to data file directory as command line arguments.
 - Submit path to log file directory as command line arguments.
+- Add the final dot to zone record names automatically if not specified in the zones.dat file. 
