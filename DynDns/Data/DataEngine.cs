@@ -28,12 +28,12 @@ namespace DynDns.Data
                 StringBuilder sb = new();
                 sb.AppendLine($"{_keyCurrentIp}={dynDnsData.CurrentIp}");
                 File.WriteAllText(fullPath, sb.ToString());
-                Log.WriteLine(Log.TraceLevel.Success, "DataEngine.NewOrDefault", $"Replaced data file '{fullPath}'.");
+                Log.WriteTrace(Log.TraceLevel.Success, "DataEngine.NewOrDefault", $"Replaced data file '{fullPath}'.");
                 return true;
             }
             catch (Exception ex)
             {
-                Log.WriteLine(Log.TraceLevel.Error, "DataEngine.NewOrDefault", $"Error loading data file:", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, "DataEngine.NewOrDefault", $"Error loading data file:", ex);
                 throw;
             }
         }
@@ -62,18 +62,18 @@ namespace DynDns.Data
                             dynDnsData.CurrentIp = lineParts[1];
                         }
                     }
-                    Log.WriteLine(Log.TraceLevel.Success, "DataEngine.NewOrDefault", $"Data file '{fullPath}' loaded.");
+                    Log.WriteTrace(Log.TraceLevel.Success, "DataEngine.NewOrDefault", $"Data file '{fullPath}' loaded.");
                     return dynDnsData;
                 }
                 else
                 {
-                    Log.WriteLine(Log.TraceLevel.Error, "DataEngine.NewOrDefault", $"Data file '{fullPath}' not found.");
+                    Log.WriteTrace(Log.TraceLevel.Error, "DataEngine.NewOrDefault", $"Data file '{fullPath}' not found.");
                 }
                 return null;
             }
             catch (Exception ex)
             {
-                Log.WriteLine(Log.TraceLevel.Error, "DataEngine.NewOrDefault", $"Error loading data file:", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, "DataEngine.NewOrDefault", $"Error loading data file:", ex);
                 throw;
             }
         }

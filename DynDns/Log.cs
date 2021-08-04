@@ -31,7 +31,7 @@ namespace DynDns
             }
         }
 
-        internal static void WriteLine(TraceLevel level, string method, string message, Exception exeption = null)
+        internal static void WriteTrace(TraceLevel level, string method, string message, Exception exeption = null)
         {
             using (var f = new StreamWriter(Path.Combine(destFolder, dailyFileName),true))
             {

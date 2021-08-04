@@ -58,7 +58,7 @@ namespace DynDns
             }
             catch (Exception ex)
             {
-                Log.WriteLine(Log.TraceLevel.Error, "Fabric.Fabric", $"Program completed with error(s):", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, "Fabric.Fabric", $"Program completed with error(s):", ex);
             }
 
 

@@ -24,7 +24,7 @@ namespace DynDns.Ip
 
             if(currentIp == null)
             {
-                Log.WriteLine(Log.TraceLevel.Success, "IpEngine.CorrectPublicIp", $"Could not detect IP address.");
+                Log.WriteTrace(Log.TraceLevel.Success, "IpEngine.CorrectPublicIp", $"Could not detect IP address.");
                 return null;
             }
             else if(currentIp != null && dynDnsData.CurrentIp.Equals(currentIp ))
@@ -50,7 +50,7 @@ namespace DynDns.Ip
                 using (var r53 = new AmazonRoute53Client())
                 {
                     var recordSet = CreateResourceRecordSet(recName, ip, RRType.A);
-                    Log.WriteLine(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'");
+                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'");
                     Change change1 = new Change
                     {
                         ResourceRecordSet = recordSet,
@@ -66,16 +66,16 @@ namespace DynDns.Ip
                             Changes = new List<Change> { change1 }
                         }
                     };
-                    Log.WriteLine(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
+                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
                     var recordsetResponse = r53.ChangeResourceRecordSetsAsync(recordsetRequest);
-                    Log.WriteLine(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Done! ({recordsetResponse.Result.HttpStatusCode}) {recordsetResponse.Result.ChangeInfo.SubmittedAt}");
+                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Done! ({recordsetResponse.Result.HttpStatusCode}) {recordsetResponse.Result.ChangeInfo.SubmittedAt}");
                     return true;
                 }
 
             }
             catch (Exception ex)
             {
-                Log.WriteLine(Log.TraceLevel.Error, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", ex);
                 return false;
             }
         }

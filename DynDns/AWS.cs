@@ -100,7 +100,7 @@ namespace DynDns
                 using (var r53 = new AmazonRoute53Client())
                 {
                     var recordSet = CreateResourceRecordSet(recName, ip, RRType.A);
-                    Log.WriteLine(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'");
+                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'");
                     Change change1 = new Change
                     {
                         ResourceRecordSet = recordSet,
@@ -116,16 +116,16 @@ namespace DynDns
                             Changes = new List<Change> { change1 }
                         }
                     };
-                    Log.WriteLine(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
+                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
                     var recordsetResponse = await r53.ChangeResourceRecordSetsAsync(recordsetRequest);
-                    Log.WriteLine(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Done!");
+                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Done!");
                     return true;
                 }
 
             }
             catch (Exception ex)
             {
-                Log.WriteLine(Log.TraceLevel.Error, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", ex);
                 return false;
             }
         }

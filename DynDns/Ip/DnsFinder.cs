@@ -21,7 +21,7 @@ namespace DynDns.Ip
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLine(Log.TraceLevel.Error, "DnsFinder.WhatismyipaddressCom", $"Error finding public IP:", ex);
+                    Log.WriteTrace(Log.TraceLevel.Error, "DnsFinder.WhatismyipaddressCom", $"Error finding public IP:", ex);
                     return null;
                 }
             }
@@ -42,12 +42,12 @@ namespace DynDns.Ip
                     string[] a = response.Split(':');
                     string a2 = a[1].Substring(1);
                     string[] a3 = a2.Split('<');
-                    Log.WriteLine(Log.TraceLevel.Success, "DnsFinder.MyPublicIp", $"IP retrieved from dyndns.org: '{a3[0]}'");
+                    Log.WriteTrace(Log.TraceLevel.Success, "DnsFinder.MyPublicIp", $"IP retrieved from dyndns.org: '{a3[0]}'");
                     return a3[0];
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLine(Log.TraceLevel.Error, "DnsFinder.DynDnsOrg", $"Error finding public IP:", ex);
+                    Log.WriteTrace(Log.TraceLevel.Error, "DnsFinder.DynDnsOrg", $"Error finding public IP:", ex);
                     return null;
                 }
             }
