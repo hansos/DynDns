@@ -42,7 +42,7 @@ namespace DynDns.Ip
         }
 
 
-        internal bool ChangeResourceRecordSet(string hostedZoneId, string recName, string ip)
+        internal bool ChangeResourceRecordSet(string hostedZoneId, string recName, string ip, string currentIp)
         {
             try
             {
@@ -67,6 +67,7 @@ namespace DynDns.Ip
                         }
                     };
                     Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
+                    Log.LogIpChange(currentIp,ip);
                     var recordsetResponse = r53.ChangeResourceRecordSetsAsync(recordsetRequest);
                     Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Done! ({recordsetResponse.Result.HttpStatusCode}) {recordsetResponse.Result.ChangeInfo.SubmittedAt}");
                     return true;

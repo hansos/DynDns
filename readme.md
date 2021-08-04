@@ -42,6 +42,10 @@ A line starting with a Hash (#) will be treated as a comment line.
 
 ## Version history
 
+### 2021-08-04
+
+- Writing a log line to **ipchanges.log** when dyndns updates the DNS server.
+
 ### 2021-07-29
 
 - Initial version.

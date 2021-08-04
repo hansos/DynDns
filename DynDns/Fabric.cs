@@ -79,7 +79,7 @@ namespace DynDns
                 {
                     Log.WriteTrace(Log.TraceLevel.Success, "Fabric.Run", $"Updating zone '{zoneRecord.ZoneId}', record '{zoneRecord.RecordName.Trim()}' with IP '{actualIp}'.");
                     IpEngine ipEngine = new();
-                    ipEngine.ChangeResourceRecordSet(zoneRecord.ZoneId, zoneRecord.RecordName, actualIp);
+                    ipEngine.ChangeResourceRecordSet(zoneRecord.ZoneId, zoneRecord.RecordName, actualIp, dynDnsData.CurrentIp);
                 }
 
 

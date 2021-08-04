@@ -22,6 +22,8 @@ namespace DynDns
         private static string dailyFileName {
             get => $"dyndns_{DateTime.Now.ToString("yyyyMMdd")}.log";
         }
+
+        private static string ipChangeFileName = "IpChanges.log";
         
         internal static void CreateDirectoryIfNeeded()
         {
@@ -31,7 +33,16 @@ namespace DynDns
             }
         }
 
-        internal static void WriteTrace(TraceLevel level, string method, string message, Exception exeption = null)
+        internal static void LogIpChange(string oldIp, string newIp)
+        {
+            using (var f = new StreamWriter(Path.Combine(destFolder, ipChangeFileName), true))
+            {
+                var line = $"{DateTime.Now.ToString("yyy.MM.dd HH.mm.ss")} IP changed from  {oldIp} to {newIp}";
+                f.WriteLine(line);
+            }
+        }
+
+            internal static void WriteTrace(TraceLevel level, string method, string message, Exception exeption = null)
         {
             using (var f = new StreamWriter(Path.Combine(destFolder, dailyFileName),true))
             {
