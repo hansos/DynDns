@@ -40,6 +40,29 @@ A line starting with a Hash (#) will be treated as a comment line.
 > [!NOTE]
 > Ensure that each zone name ends with a dot!
 
+## Command line parameters
+
+### Command line switches
+
+*This functionality is currently under development.*
+
+| Switch     |Purpose          |
+| ---------- | --------------- |
+| -q         | Quiet mode.     |
+| -v         | Version.        |
+| -m         | Show menu.      |
+| -t *n*     | Set Trace level |
+
+#### Trace levels
+
+| Level | Code  | Description              |
+| ----  | ----- | ------------------------ |
+| 0     | NONE  | No trace                 |
+| 1     | ERR   | Error messages           |
+| 2     | SUCC  | Success Messages         |
+| 3     | WARN  | Warning messages         |
+| 4     | TRACE | Trace messages (default) |
+
 ## Version history
 
 ### 2021-08-04 (V1.0.0)
