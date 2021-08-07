@@ -42,11 +42,11 @@ A line starting with a Hash (#) will be treated as a comment line.
 
 ## Version history
 
-### 2021-08-04
+### 2021-08-04 (V1.0.0)
 
 - Writing a log line to **ipchanges.log** when dyndns updates the DNS server.
 
-### 2021-07-29
+### 2021-07-29 (V0.9.0)
 
 - Initial version.
 
@@ -56,3 +56,6 @@ A line starting with a Hash (#) will be treated as a comment line.
 - Submit path to log file directory as command line arguments.
 - Add the final dot to zone record names automatically if not specified in the zones.dat file.
 - Create the dyndns.dat file if it doesn't exists.
+- Log version number on startup trace message ([Fabric.Fabric] Program started).
+- Create flag to limit trace line
+- Improve Trace Line status (distinguish between SUCCESS and TRACE with more).
