@@ -19,6 +19,22 @@ namespace DynDns.ConsoleIo
             Console.Write(sb.ToString());
         }
 
+        static internal void UnrecognizedOptionText(string option)
+        {
+            StringBuilder sb = new();
+            sb.AppendLine($"dyndns: unrecognized option '{option}'");
+            sb.AppendLine("Try 'dyndns --help' for more information.");
+            Console.Write(sb.ToString());
+        }
+
+        static internal void ErrorText(string message)
+        {
+            StringBuilder sb = new();
+            sb.AppendLine($"dyndns: {message}");
+            sb.AppendLine("Try 'dyndns --help' for more information.");
+            Console.Write(sb.ToString());
+        }
+
         static internal void VersionText()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -50,9 +66,11 @@ namespace DynDns.ConsoleIo
             sb.AppendLine("      --version             Output version information and exit.");
             sb.AppendLine("  -q  --quiet               Supress all output to console.");
             sb.AppendLine("  -r  --run=[PATH]          Run the DNS update engine. Unless PATH to a data file is spesified,");
-            sb.AppendLine("                              zones are read from the 'zones.dat' data files located together with the program file.");
+            sb.AppendLine("                              zones are read from the 'zones.dat' data file located together with the program file.");
             sb.AppendLine("  -t  --trace-level=LEVEL   Set trace level for trace file. 0=nothing, 4=full trace. Values and codes accepted.");
-            sb.AppendLine("      --test-run            Run the DNS update engine, bot don't write the IP address to the DNS zone record.");
+            sb.AppendLine("      --test-run=[PATH]     Run the DNS update engine, bot don't write the IP address to the DNS zone record.");
+            sb.AppendLine("                              Unless PATH to a data file is spesified, zones are read from the 'zones.dat' data file");
+            sb.AppendLine("                              located together with the program file.");
             sb.AppendLine("  -l  --log-path=PATH       Path to the log directory. If not submitted, log files are created in '/var/log/dyndns'.");
             sb.AppendLine();
             sb.AppendLine("Trace levels:");
@@ -61,6 +79,8 @@ namespace DynDns.ConsoleIo
             sb.AppendLine("  2    SUCC                 Error and success messages only.");
             sb.AppendLine("  3    WARN                 Warnings, errors and success messages.");
             sb.AppendLine("  4    TRACE                Full trace.");
+            sb.AppendLine();
+            sb.AppendLine("If both --run and --test-run are specified, the program ends with an error.");
             sb.AppendLine();
             sb.AppendLine("See <https://github.com/hansos/DynDns/blob/master/readme.md> for more information.");
             Console.Write(sb.ToString());

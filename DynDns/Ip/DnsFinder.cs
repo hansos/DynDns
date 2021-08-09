@@ -7,7 +7,7 @@ namespace DynDns.Ip
     internal static class DnsFinder
     {
 
-        internal static string WhatismyipaddressCom(Log.TraceLevel maxLevel)
+        internal static string WhatismyipaddressCom(Log.TraceLevel maxLevel, bool quiet)
         {
             try
             {
@@ -20,13 +20,13 @@ namespace DynDns.Ip
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, Log.TraceLevel.Error,"DnsFinder.WhatismyipaddressCom", $"Error finding public IP:", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, Log.TraceLevel.Error,"DnsFinder.WhatismyipaddressCom", $"Error finding public IP:", quiet, ex);
                 return null;
             }
         }
 
 
-        internal static string DynDnsOrg(Log.TraceLevel maxLevel)
+        internal static string DynDnsOrg(Log.TraceLevel maxLevel, bool quiet)
         {
             try
             {
@@ -38,12 +38,12 @@ namespace DynDns.Ip
                 string[] a = response.Split(':');
                 string a2 = a[1].Substring(1);
                 string[] a3 = a2.Split('<');
-                Log.WriteTrace(Log.TraceLevel.Trace, maxLevel, "DnsFinder.MyPublicIp", $"IP retrieved from dyndns.org: '{a3[0]}'");
+                Log.WriteTrace(Log.TraceLevel.Trace, maxLevel, "DnsFinder.MyPublicIp", $"IP retrieved from dyndns.org: '{a3[0]}'", quiet);
                 return a3[0];
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "DnsFinder.DynDnsOrg", $"Error finding public IP:", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "DnsFinder.DynDnsOrg", $"Error finding public IP:", quiet, ex);
                 return null;
             }
         }

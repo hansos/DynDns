@@ -91,7 +91,7 @@ namespace DynDns
             
         }
 
-        internal static async Task<bool> ChangeResourceRecordSet(string hostedZoneId, string zoneName, string recName, string ip, Log.TraceLevel maxLevel)
+        internal static async Task<bool> ChangeResourceRecordSet(string hostedZoneId, string zoneName, string recName, string ip, Log.TraceLevel maxLevel, bool quiet)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace DynDns
                 using (var r53 = new AmazonRoute53Client())
                 {
                     var recordSet = CreateResourceRecordSet(recName, ip, RRType.A);
-                    Log.WriteTrace(Log.TraceLevel.Success, maxLevel, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'");
+                    Log.WriteTrace(Log.TraceLevel.Success, maxLevel, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'", quiet);
                     Change change1 = new Change
                     {
                         ResourceRecordSet = recordSet,
@@ -115,16 +115,16 @@ namespace DynDns
                             Changes = new List<Change> { change1 }
                         }
                     };
-                    Log.WriteTrace(Log.TraceLevel.Trace, maxLevel, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
+                    Log.WriteTrace(Log.TraceLevel.Trace, maxLevel, "AWS.ChangeResourceRecordSet", $"Sending to AWS...", quiet);
                     var recordsetResponse = await r53.ChangeResourceRecordSetsAsync(recordsetRequest);
-                    Log.WriteTrace(Log.TraceLevel.Success, maxLevel, "AWS.ChangeResourceRecordSet", $"Done!");
+                    Log.WriteTrace(Log.TraceLevel.Success, maxLevel, "AWS.ChangeResourceRecordSet", $"Done!", quiet);
                     return true;
                 }
 
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", quiet, ex);
                 return false;
             }
         }

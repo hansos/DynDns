@@ -10,10 +10,12 @@ namespace DynDns.Data
         private const string _dataFileName = "dyndns.dat";
         private const string _keyCurrentIp = "currentip";
         private Log.TraceLevel _maxLevel;
+        private readonly bool _quiet;
 
-        public DataEngine(Log.TraceLevel maxLevel)
+        public DataEngine(Log.TraceLevel maxLevel, bool quiet)
         {
             _maxLevel = maxLevel;
+            _quiet = quiet;
         }
 
         /// <summary>
@@ -32,12 +34,12 @@ namespace DynDns.Data
                 StringBuilder sb = new();
                 sb.AppendLine($"{_keyCurrentIp}={dynDnsData.CurrentIp}");
                 File.WriteAllText(fullPath, sb.ToString());
-                Log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.NewOrDefault", $"Replaced data file '{fullPath}'.");
+                Log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.NewOrDefault", $"Replaced data file '{fullPath}'.", _quiet);
                 return true;
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
                 throw;
             }
         }
@@ -66,18 +68,18 @@ namespace DynDns.Data
                             dynDnsData.CurrentIp = lineParts[1];
                         }
                     }
-                    Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{fullPath}' loaded.");
+                    Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{fullPath}' loaded.", _quiet);
                     return dynDnsData;
                 }
                 else
                 {
-                    Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{fullPath}' not found.");
+                    Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{fullPath}' not found.", _quiet);
                 }
                 return null;
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
                 throw;
             }
         }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DynDns": {
+      "commandName": "Project",
+      "commandLineArgs": "--test-run -t=4"
+    }
+  }
+}
