@@ -1,15 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>dyndns</AssemblyName>
-    <Authors>hans.olav@sorteberg.com</Authors>
-    <Company>hans.olav@sorteberg.com</Company>
+    <Authors>Hans Olav Sorteberg</Authors>
+    <Company>Toolkit Solutiuons AS</Company>
     <Product>Dynamic DNS Client for AWS</Product>
-    <Copyright>Copyright 2021 hans.olav@sorteberg.com, All rights reserved.</Copyright>
+    <Copyright>Copyright 2021 Hans Olav Sorteberg, All rights reserved.</Copyright>
     <AssemblyVersion>0.9.0.0</AssemblyVersion>
     <FileVersion>0.9.0.0</FileVersion>
+    <Version>0.9</Version>
   </PropertyGroup>
 
   <ItemGroup>

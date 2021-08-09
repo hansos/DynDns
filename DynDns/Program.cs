@@ -1,4 +1,5 @@
-﻿using DynDns.Logging;
+﻿using DynDns.ConsoleIo;
+using DynDns.Logging;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -8,46 +9,24 @@ namespace DynDns
     class Program
     {
 
+        /// <summary>
+        /// Program entry point. If command line arguments exists, 
+        /// Calls the command line argument interpreter, If not, output a message on console and exit.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             Log.TraceLevel maxLevel = Log.TraceLevel.Trace;
-            bool quietMode = false;
-            bool doExecute = true;
-            bool showMenu = false;
             try
             {
-
-                for (int i = 0; i < args.Length; i++)
+                if(args.Length == 0)
                 {
-                    if (args[i].ToLower().Equals("-t"))
-                    {
-                        maxLevel = (Log.TraceLevel)Enum.Parse(typeof(Log.TraceLevel), args[++i]);
-                    }
-                    else if (args[i].ToLower().Equals("-q"))
-                    {
-                        quietMode = true;
-                    }
-                    else if (args[i].ToLower().Equals("-m"))
-                    {
-                        doExecute = false;
-                        showMenu = true;
-                    }
-
+                    Output.MissingArgumentText();
+                    Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "Fabric.Fabric", $"No command line argument defined.");
                 }
-
-                if(!quietMode)
+                else
                 {
-                    ShowAppDescription();
-                    if (showMenu)
-                    {
-                        ShowMenu();
-                    }
-
-                }
-
-                if (doExecute)
-                {
-                    var result = new Fabric(maxLevel).Run(quietMode);
+                    Interpret.InterpretArguments(args);
                 }
 
             }
@@ -55,22 +34,6 @@ namespace DynDns
             {
                 Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "Fabric.Fabric", $"Program completed with error(s):", ex);
             }
-
-
         }
-
-        private static void ShowMenu()
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void ShowAppDescription()
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            Console.WriteLine($"EsoGame Dynamic DNS Updater version {fileVersionInfo.ProductVersion}");
-            Console.WriteLine("Copyright (c) 2021 hans.olav@sorteberg.com, all rights reserved.");
-        }
-
     }
 }
