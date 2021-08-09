@@ -11,32 +11,31 @@ namespace DynDns.Zone
         private readonly bool _quiet;
         private const string _zoneFileName = "zones.dat";
         private const int _zoneIdLength = 21;
-
-        public ZoneEngine(Log.TraceLevel maxLevel, bool quiet)
+        private Log _log;
+        public ZoneEngine(Log.TraceLevel maxLevel, bool quiet, Log log)
         {
             _maxLevel = maxLevel;
             _quiet = quiet;
+            _log = log;
         }
 
-        internal List<Zone.ZoneRecord> LoadZones(string execDir)
+        internal List<Zone.ZoneRecord> LoadZones(string zoneFilePath)
         {
             try
             {
-                var fullPath = Path.Combine(execDir, _zoneFileName);
-
                 // Return null if file is not fond.
 
-                if (!File.Exists(fullPath))
+                if (!File.Exists(zoneFilePath))
                 {
-                    Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone File '{fullPath}' not found.", _quiet);
+                    _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone File '{zoneFilePath}' not found.", _quiet);
                     return null;
                 }
 
                 // Load the zone file and return as a ZoneRecord list.
 
-                Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.LoadZones", $"Reading zones from '{fullPath}'...", _quiet);
+                _log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.LoadZones", $"Reading zones from '{zoneFilePath}'...", _quiet);
                 List<Zone.ZoneRecord> washedLines = new();
-                var lines = File.ReadAllLines(fullPath);
+                var lines = File.ReadAllLines(zoneFilePath);
                 foreach (var line in lines)
                 {
                     if (line.Trim()[0] != '#' && line.Contains(';') && line.Length > 27)
@@ -44,13 +43,13 @@ namespace DynDns.Zone
                         var rec = line.Split(";", StringSplitOptions.RemoveEmptyEntries);
                         if (rec.Length != 2)
                         {
-                            Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid. Should contain two values.", _quiet);
+                            _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid. Should contain two values.", _quiet);
                             return null;
                         }
 
                         if (rec[0].Length != _zoneIdLength)
                         {
-                            Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid. Zone ID must be {_zoneIdLength} characters long.", _quiet);
+                            _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid. Zone ID must be {_zoneIdLength} characters long.", _quiet);
                             return null;
                         }
 
@@ -63,26 +62,26 @@ namespace DynDns.Zone
                     }
                     else if (line.Trim()[0] != '#')
                     {
-                        Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid.", _quiet);
+                        _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid.", _quiet);
                         return null;
                     }
                 }
 
                 if (washedLines.Count == 0)
                 {
-                    Log.WriteTrace(Log.TraceLevel.Warning, _maxLevel, "Fabric.LoadZones", $"No Zone Records found.", _quiet);
+                    _log.WriteTrace(Log.TraceLevel.Warning, _maxLevel, "Fabric.LoadZones", $"No Zone Records found.", _quiet);
                     return null;
                 }
                 else
                 {
-                    Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.LoadZones", $"Number of Zone Records loaded: {washedLines.Count} ", _quiet);
+                    _log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.LoadZones", $"Number of Zone Records loaded: {washedLines.Count} ", _quiet);
                     return washedLines;
                 }
 
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Error loading zone file: ", _quiet, ex);
+                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Error loading zone file: ", _quiet, ex);
                 throw;
             }
         }

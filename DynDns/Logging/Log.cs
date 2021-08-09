@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace DynDns.Logging
 {
-    internal static class Log
+    internal class Log
     {
+
+        internal readonly string _logFileDir;
+
+        internal Log(string logFileDir)
+        {
+            _logFileDir = logFileDir;
+        }
 
         internal enum TraceLevel
         {
@@ -19,15 +26,28 @@ namespace DynDns.Logging
             Trace = 4,
         }
 
-        private static string destFolder = Path.Combine(Path.DirectorySeparatorChar.ToString(),"var", "log", "dyndns");
+        private string destFolder
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_logFileDir))
+                {
+                    return Path.Combine(Path.DirectorySeparatorChar.ToString(), "var", "log", "dyndns");
+                }
+                else
+                {
+                    return _logFileDir;
+                }
+            }
+        }
         
-        private static string dailyFileName {
+        private string dailyFileName {
             get => $"dyndns_{DateTime.Now.ToString("yyyyMMdd")}.log";
         }
 
-        private static string ipChangeFileName = "IpChanges.log";
+        private string ipChangeFileName = "IpChanges.log";
         
-        internal static void CreateDirectoryIfNeeded()
+        internal void CreateDirectoryIfNeeded()
         {
             if (!Directory.Exists(destFolder))
             {
@@ -35,7 +55,7 @@ namespace DynDns.Logging
             }
         }
 
-        internal static void LogIpChange(TraceLevel maxLevel, string oldIp, string newIp, bool quiet)
+        internal void LogIpChange(TraceLevel maxLevel, string oldIp, string newIp, bool quiet)
         {
             if(maxLevel < TraceLevel.Success)
             {
@@ -54,7 +74,7 @@ namespace DynDns.Logging
             }
         }
 
-        internal static void WriteTrace(TraceLevel level, TraceLevel maxLevel, string method, string message, bool quiet, Exception exeption = null)
+        internal void WriteTrace(TraceLevel level, TraceLevel maxLevel, string method, string message, bool quiet, Exception exeption = null)
         {
 
             if (level > maxLevel)

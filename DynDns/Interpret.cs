@@ -18,8 +18,9 @@ namespace DynDns
             bool quiet = false;
             bool run = false;
             bool testrun = false;
-            string dataFile = null;
-            string tracePath = null;
+            string ipBuffer = null;
+            string logFilePath = null;
+            string zoneFilePath = null;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -39,22 +40,22 @@ namespace DynDns
                     {
                         quiet = true;
                     }
-                    else if (args[i].Equals("-r") || args[i].Equals("--run"))
+                    else if (args[i].StartsWith("-r") || args[i].StartsWith("--run"))
                     {
                         run = true;
                         var splitted = args[i].Split("=", StringSplitOptions.RemoveEmptyEntries);
                         if (splitted.Length == 2)
                         {
-                            dataFile = splitted[1].Trim();
+                            zoneFilePath = splitted[1].Trim();
                         }
                     }
-                    else if (args[i].Equals("--test-run"))
+                    else if (args[i].StartsWith("--test-run"))
                     {
                         testrun = true;
                         var splitted = args[i].Split("=", StringSplitOptions.RemoveEmptyEntries);
                         if (splitted.Length == 2)
                         {
-                            dataFile = splitted[1].Trim();
+                            zoneFilePath = splitted[1].Trim();
                         }
                     }
                     else if (args[i].StartsWith("-t") || args[i].StartsWith("--trace-level"))
@@ -100,7 +101,17 @@ namespace DynDns
                             Output.UnrecognizedOptionText(args[i]);
                             return;
                         }
-                        tracePath = splitted[1].Trim();
+                        logFilePath = splitted[1].Trim();
+                    }
+                    else if (args[i].StartsWith("-i") || args[i].StartsWith("--ip-buffer-path"))
+                    {
+                        var splitted = args[i].Split("=", StringSplitOptions.RemoveEmptyEntries);
+                        if (splitted.Length != 2)
+                        {
+                            Output.UnrecognizedOptionText(args[i]);
+                            return;
+                        }
+                        ipBuffer = splitted[1].Trim();
                     }
                 }
             }
@@ -115,7 +126,7 @@ namespace DynDns
                 Output.ErrorText("One of the --run and --test-run arguments must be specified.");
             }
 
-            var result = new Fabric(level, quiet).Run(run, dataFile, tracePath );
+            var result = new Fabric(level, quiet, logFilePath).Run(run, ipBuffer, zoneFilePath );
 
 
         }

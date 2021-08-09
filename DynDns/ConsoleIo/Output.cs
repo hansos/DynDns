@@ -65,13 +65,15 @@ namespace DynDns.ConsoleIo
             sb.AppendLine("      --help                Display this help and exit.");
             sb.AppendLine("      --version             Output version information and exit.");
             sb.AppendLine("  -q  --quiet               Supress all output to console.");
-            sb.AppendLine("  -r  --run=[PATH]          Run the DNS update engine. Unless PATH to a data file is spesified,");
+            sb.AppendLine("  -r  --run=[PATH]          Run the DNS update engine. Unless PATH to a zone file is spesified,");
             sb.AppendLine("                              zones are read from the 'zones.dat' data file located together with the program file.");
-            sb.AppendLine("  -t  --trace-level=LEVEL   Set trace level for trace file. 0=nothing, 4=full trace. Values and codes accepted.");
             sb.AppendLine("      --test-run=[PATH]     Run the DNS update engine, bot don't write the IP address to the DNS zone record.");
             sb.AppendLine("                              Unless PATH to a data file is spesified, zones are read from the 'zones.dat' data file");
             sb.AppendLine("                              located together with the program file.");
+            sb.AppendLine("  -t  --trace-level=LEVEL   Set trace level for trace file. 0=nothing, 4=full trace. Values and codes accepted.");
             sb.AppendLine("  -l  --log-path=PATH       Path to the log directory. If not submitted, log files are created in '/var/log/dyndns'.");
+            sb.AppendLine("  -i  --ip-buffer-path=PATH Path to the IP buffer file. Unless PATH to a zone file is spesified,");
+            sb.AppendLine("                              the IP buffer is created 'as dyndns.dat' located together with the program file.");
             sb.AppendLine();
             sb.AppendLine("Trace levels:");
             sb.AppendLine("  0    NONE                 No trace.");

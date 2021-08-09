@@ -11,11 +11,13 @@ namespace DynDns.Data
         private const string _keyCurrentIp = "currentip";
         private Log.TraceLevel _maxLevel;
         private readonly bool _quiet;
+        private Log _log;
 
-        public DataEngine(Log.TraceLevel maxLevel, bool quiet)
+        public DataEngine(Log.TraceLevel maxLevel, bool quiet, Log log)
         {
             _maxLevel = maxLevel;
             _quiet = quiet;
+            _log = log;
         }
 
         /// <summary>
@@ -34,12 +36,12 @@ namespace DynDns.Data
                 StringBuilder sb = new();
                 sb.AppendLine($"{_keyCurrentIp}={dynDnsData.CurrentIp}");
                 File.WriteAllText(fullPath, sb.ToString());
-                Log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.NewOrDefault", $"Replaced data file '{fullPath}'.", _quiet);
+                _log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.NewOrDefault", $"Replaced data file '{fullPath}'.", _quiet);
                 return true;
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
+                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
                 throw;
             }
         }
@@ -54,12 +56,11 @@ namespace DynDns.Data
         {
             try
             {
-                var fullPath = Path.Combine(dataFilePath, _dataFileName);
                 DynDnsData dynDnsData = new();
 
-                if (File.Exists(fullPath))
+                if (File.Exists(dataFilePath))
                 {
-                    var lines = File.ReadAllLines(fullPath);
+                    var lines = File.ReadAllLines(dataFilePath);
                     foreach (var line in lines)
                     {
                         var lineParts = line.Split("=", 2);
@@ -68,18 +69,18 @@ namespace DynDns.Data
                             dynDnsData.CurrentIp = lineParts[1];
                         }
                     }
-                    Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{fullPath}' loaded.", _quiet);
+                    _log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{dataFilePath}' loaded.", _quiet);
                     return dynDnsData;
                 }
                 else
                 {
-                    Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{fullPath}' not found.", _quiet);
+                    _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{dataFilePath}' not found.", _quiet);
                 }
                 return null;
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
+                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
                 throw;
             }
         }

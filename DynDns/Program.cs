@@ -22,7 +22,7 @@ namespace DynDns
                 if(args.Length == 0)
                 {
                     Output.MissingArgumentText();
-                    Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "Fabric.Fabric", $"No command line argument defined.", false);
+                    new Log(null).WriteTrace(Log.TraceLevel.Error, maxLevel, "Fabric.Fabric", $"No command line argument defined.", false);
                 }
                 else
                 {
@@ -32,7 +32,7 @@ namespace DynDns
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "Fabric.Fabric", $"Program completed with error(s):",false, ex);
+                new Log(null).WriteTrace(Log.TraceLevel.Error, maxLevel, "Fabric.Fabric", $"Program completed with error(s):",false, ex);
             }
         }
     }

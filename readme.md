@@ -46,12 +46,16 @@ A line starting with a Hash (#) will be treated as a comment line.
 
 *This functionality is currently under development.*
 
-| Switch     |Purpose                               |
-| ---------- | ------------------------------------ |
-| -q         | Quiet mode.                          |
-| -t *n*     | Set Trace level to *n*.              |
-| --help     | Display this help and exit.          |
-| --version  | Output version information and exit. |
+| Short      | Long                  | Purpose                                       |
+| ---------- | --------------------- | --------------------------------------------- |
+|            | --help                | Display this help and exit.                   |
+|            | --Version             | Output version information and exit.          |
+| -q         | --quiet               | Quiet mode.                                   |
+| -r         | --run=[PATH]          | Run the DNS update engine. Unless PATH to a data file is spesified,zones are read from the 'zones.dat' data file located together with the program file. |
+|            | --test-run=[PATH]     | Run the DNS update engine, bot don't write the IP address to the DNS zone record.Unless PATH to a data file is spesified, zones are read from the 'zones.dat' data file located together with the program file. |
+| -t         | --trace-level=LEVEL   | Set trace level for trace file. 0=nothing, 4=full trace. Values and codes accepted.                                   |
+| -l         | --log-path=PATH       | Path to the log directory. If not submitted, log files are created in '/var/log/dyndns'.                              |
+| -i         | --ip-buffer-path=PATH | Path to the IP buffer file. Unless PATH to a zone file is spesified, the IP buffer is created 'as dyndns.dat' located together with the program file. |
 
 #### Trace levels
 
@@ -65,7 +69,17 @@ A line starting with a Hash (#) will be treated as a comment line.
 
 ## Version history
 
-### 2021-08-04 (V1.0.0)
+### 2021-08-09 (V0.9.2)
+
+- Version command implemented.
+- Help page implemented.
+- Startup arguments for Run and Test Run implemented.
+- Trace level argument implemented.
+- Trace to console implemented.
+- Quiet mode implemented to prevent console output.
+- Setting path and file name to IP address buffer is now possible using the -i argument.
+
+### 2021-08-04 (V0.9.1)
 
 - Writing a log line to **ipchanges.log** when dyndns updates the DNS server.
 
@@ -75,10 +89,9 @@ A line starting with a Hash (#) will be treated as a comment line.
 
 ### Roadmap
 
-- Submit path to data file directory as command line arguments.
-- Submit path to log file directory as command line arguments.
+- ~~Submit path to data file directory as command line arguments.~~
+- ~~Submit path to log file directory as command line arguments.~~
 - Add the final dot to zone record names automatically if not specified in the zones.dat file.
 - Create the dyndns.dat file if it doesn't exists.
-- Log version number on startup trace message ([Fabric.Fabric] Program started).
-- Create flag to limit trace line
-- Improve Trace Line status (distinguish between SUCCESS and TRACE with more).
+- ~~Create flag to limit trace line~~
+- ~~Improve Trace Line status (distinguish between SUCCESS and TRACE with more).~~

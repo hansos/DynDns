@@ -11,11 +11,12 @@ namespace DynDns.Ip
 
         private readonly Log.TraceLevel _maxLevel;
         private  readonly bool _quiet;
-
-        public IpEngine(Log.TraceLevel maxLevel, bool quiet)
+        private Log _log;
+        public IpEngine(Log.TraceLevel maxLevel, bool quiet, Log log)
         {
             _maxLevel = maxLevel;
             _quiet = quiet;
+            _log = log;
         }
 
         /// <summary>
@@ -25,28 +26,28 @@ namespace DynDns.Ip
         /// <returns>
         /// New IP address or null.
         /// </returns>
-        internal string CorrectPublicIp(Data.DynDnsData dynDnsData)
-        {
-            var currentIp = DnsFinder.WhatismyipaddressCom(_maxLevel, _quiet);
+        //internal string CorrectPublicIp(Data.DynDnsData dynDnsData)
+        //{
+        //    var currentIp = DnsFinder.WhatismyipaddressCom(_maxLevel, _quiet);
 
-            if(currentIp == null)
-            {
-                Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "IpEngine.CorrectPublicIp", $"Could not detect IP address.", _quiet);
-                return null;
-            }
-            else if(currentIp != null && dynDnsData.CurrentIp.Equals(currentIp ))
-            {
-                return null;
-            }
-            else if (currentIp != null)
-            {
-                return currentIp;
-            }
+        //    if(currentIp == null)
+        //    {
+        //        _log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "IpEngine.CorrectPublicIp", $"Could not detect IP address.", _quiet);
+        //        return null;
+        //    }
+        //    else if(currentIp != null && dynDnsData.CurrentIp.Equals(currentIp ))
+        //    {
+        //        return null;
+        //    }
+        //    else if (currentIp != null)
+        //    {
+        //        return currentIp;
+        //    }
 
-            //Log.WriteLine($"Reading data files from '{execDir}'.");
+        //    //Log.WriteLine($"Reading data files from '{execDir}'.");
 
-            return null;
-        }
+        //    return null;
+        //}
 
 
         internal bool ChangeResourceRecordSet(string hostedZoneId, string recName, string ip, string currentIp, bool sharp = true )
@@ -57,7 +58,7 @@ namespace DynDns.Ip
                 using (var r53 = new AmazonRoute53Client())
                 {
                     var recordSet = CreateResourceRecordSet(recName, ip, RRType.A);
-                    Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'", _quiet);
+                    _log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'", _quiet);
                     Change change1 = new Change
                     {
                         ResourceRecordSet = recordSet,
@@ -73,18 +74,18 @@ namespace DynDns.Ip
                             Changes = new List<Change> { change1 }
                         }
                     };
-                    Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Sending to AWS...", _quiet);
-                    Log.LogIpChange(_maxLevel, currentIp, ip, _quiet);
+                    _log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Sending to AWS...", _quiet);
+                    _log.LogIpChange(_maxLevel, currentIp, ip, _quiet);
                     if (sharp)
                     {
                         var recordsetResponse = r53.ChangeResourceRecordSetsAsync(recordsetRequest);
                         string msg = $"DNS Zone Record updated: AWS returned response code '{recordsetResponse.Result.HttpStatusCode}' at {recordsetResponse.Result.ChangeInfo.SubmittedAt}";
-                        Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", msg, _quiet);
+                        _log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", msg, _quiet);
                     }
                     else
                     {
                         string msg = "Running in test modus. DNS Zone Record not updated.";
-                        Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", msg, _quiet);
+                        _log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", msg, _quiet);
                     }
                     return true;
                 }
@@ -92,7 +93,7 @@ namespace DynDns.Ip
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error,_maxLevel, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", _quiet, ex);
+                _log.WriteTrace(Log.TraceLevel.Error,_maxLevel, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", _quiet, ex);
                 return false;
             }
         }
