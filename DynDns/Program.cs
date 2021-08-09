@@ -1,67 +1,76 @@
-﻿using Amazon.Route53;
-using Amazon.Route53.Model;
+﻿using DynDns.Logging;
 using System;
-using System.Collections.Generic;
-using System.Net;
+using System.Diagnostics;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace DynDns
 {
     class Program
     {
 
-
-
-
-
-       // static async Task ExecAsync(string recName)
-       // {
-       //     try
-       //     {
-       //         string zoneName = "esogame.net.";
-       //         string hostedZoneId = "Z05346433GDXGH3DVNB6C";
-       //         //string publicIp = MyPublicIp;
-
-       //         //var result = await AWS.ChangeResourceRecordSet(hostedZoneId, zoneName, recName, publicIp);
-       //         string msg = "IP updated successfully on DNS server.";
-       //         Console.WriteLine(msg);
-       //         Log.WriteLine(msg);
-       //     }
-       //     catch (Exception ex)
-       //     {
-       //         Console.WriteLine(ex.Message);
-       //         Log.WriteLine(ex.Message);
-       //         throw;
-       //     }
-       //}
-
         static void Main(string[] args)
         {
+            Log.TraceLevel maxLevel = Log.TraceLevel.Trace;
+            bool quietMode = false;
+            bool doExecute = true;
+            bool showMenu = false;
             try
             {
 
-                Console.WriteLine("EsoGame Dynamic DNS Updater");
-                Console.WriteLine("Copyright (c) 2021 hans.olav@sorteberg.com, all rights reserved.");
+                for (int i = 0; i < args.Length; i++)
+                {
+                    if (args[i].ToLower().Equals("-t"))
+                    {
+                        maxLevel = (Log.TraceLevel)Enum.Parse(typeof(Log.TraceLevel), args[++i]);
+                    }
+                    else if (args[i].ToLower().Equals("-q"))
+                    {
+                        quietMode = true;
+                    }
+                    else if (args[i].ToLower().Equals("-m"))
+                    {
+                        doExecute = false;
+                        showMenu = true;
+                    }
 
-                var result = new Fabric().Run();
+                }
 
-                //string execPath = Assembly.GetEntryAssembly().Location;
-                //Log.WriteLine($"DynDns running in '{execPath}'.");
+                if(!quietMode)
+                {
+                    ShowAppDescription();
+                    if (showMenu)
+                    {
+                        ShowMenu();
+                    }
 
-                //string recName = "www.esogame.net.";
-                //string recName = "rygeneminecraftforening.esogame.net.";
-                //Log.WriteLine($"Correct IP address for '{recName}' is '{MyPublicIp}'.");
+                }
 
-                // _ = ExecAsync(recName);
+                if (doExecute)
+                {
+                    var result = new Fabric(maxLevel).Run(quietMode);
+                }
 
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, "Fabric.Fabric", $"Program completed with error(s):", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, maxLevel, "Fabric.Fabric", $"Program completed with error(s):", ex);
             }
 
 
         }
+
+        private static void ShowMenu()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void ShowAppDescription()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            Console.WriteLine($"EsoGame Dynamic DNS Updater version {fileVersionInfo.ProductVersion}");
+            Console.WriteLine("Copyright (c) 2021 hans.olav@sorteberg.com, all rights reserved.");
+        }
+
     }
 }

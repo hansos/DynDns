@@ -46,12 +46,12 @@ A line starting with a Hash (#) will be treated as a comment line.
 
 *This functionality is currently under development.*
 
-| Switch     |Purpose                 |
-| ---------- | ---------------------- |
-| -q         | Quiet mode.            |
-| -v         | Version.               |
-| -m         | Show menu.             |
-| -t *n*     | Set Trace level to *n* |
+| Switch     |Purpose                               |
+| ---------- | ------------------------------------ |
+| -q         | Quiet mode.                          |
+| -t *n*     | Set Trace level to *n*.              |
+| --help     | Display this help and exit.          |
+| --version  | Output version information and exit. |
 
 #### Trace levels
 

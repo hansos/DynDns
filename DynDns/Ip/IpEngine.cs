@@ -1,15 +1,20 @@
 ﻿using Amazon.Route53;
 using Amazon.Route53.Model;
+using DynDns.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DynDns.Ip
 {
     internal class IpEngine
     {
+
+        private Log.TraceLevel _maxLevel;
+
+        public IpEngine(Log.TraceLevel maxLevel)
+        {
+            _maxLevel = maxLevel;
+        }
 
         /// <summary>
         /// If detected address differs from stored address, the new IP address is returned.
@@ -20,11 +25,11 @@ namespace DynDns.Ip
         /// </returns>
         internal string CorrectPublicIp(Data.DynDnsData dynDnsData)
         {
-            var currentIp = DnsFinder.WhatismyipaddressCom;
+            var currentIp = DnsFinder.WhatismyipaddressCom(_maxLevel);
 
             if(currentIp == null)
             {
-                Log.WriteTrace(Log.TraceLevel.Success, "IpEngine.CorrectPublicIp", $"Could not detect IP address.");
+                Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "IpEngine.CorrectPublicIp", $"Could not detect IP address.");
                 return null;
             }
             else if(currentIp != null && dynDnsData.CurrentIp.Equals(currentIp ))
@@ -50,7 +55,7 @@ namespace DynDns.Ip
                 using (var r53 = new AmazonRoute53Client())
                 {
                     var recordSet = CreateResourceRecordSet(recName, ip, RRType.A);
-                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'");
+                    Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'");
                     Change change1 = new Change
                     {
                         ResourceRecordSet = recordSet,
@@ -66,17 +71,17 @@ namespace DynDns.Ip
                             Changes = new List<Change> { change1 }
                         }
                     };
-                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
-                    Log.LogIpChange(currentIp,ip);
+                    Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Sending to AWS...");
+                    Log.LogIpChange(_maxLevel, currentIp, ip);
                     var recordsetResponse = r53.ChangeResourceRecordSetsAsync(recordsetRequest);
-                    Log.WriteTrace(Log.TraceLevel.Success, "AWS.ChangeResourceRecordSet", $"Done! ({recordsetResponse.Result.HttpStatusCode}) {recordsetResponse.Result.ChangeInfo.SubmittedAt}");
+                    Log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Done! ({recordsetResponse.Result.HttpStatusCode}) {recordsetResponse.Result.ChangeInfo.SubmittedAt}");
                     return true;
                 }
 
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", ex);
+                Log.WriteTrace(Log.TraceLevel.Error,_maxLevel, "AWS.ChangeResourceRecordSet", $"Error Changing ResourceRecordSet: ", ex);
                 return false;
             }
         }

@@ -1,30 +1,31 @@
 ﻿using DynDns.Ip;
+using DynDns.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DynDns
 {
     internal class Fabric
     {
 
+        private Log.TraceLevel _maxLevel = Log.TraceLevel.Trace;
 
 
-        internal Fabric()
+        internal Fabric(Log.TraceLevel maxLevel)
         {
             try
             {
+                _maxLevel = maxLevel;
+
                 Log.CreateDirectoryIfNeeded();
-                Log.WriteTrace(Log.TraceLevel.Success, "Fabric.Fabric", "Program started.");
+                Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.Fabric", "Program started.");
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, "Fabric.Fabric", "Unspecified error", ex);
+                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.Fabric", "Unspecified error", ex);
             }
 
         }
@@ -34,28 +35,28 @@ namespace DynDns
         /// If changed, update DNS server and stored addresses.
         /// </summary>
         /// <returns></returns>
-        internal bool Run()
+        internal bool Run(bool quietMode)
         {
             try
             {
 
                 // Check if We can get our IP from a DynDns.org or other provider.
                 // If a valid IP is not received, return false.
-                string actualIp = DnsFinder.WhatismyipaddressCom;
+                string actualIp = DnsFinder.WhatismyipaddressCom(_maxLevel);
                 if (DnsFinder.IsValidIpv4(actualIp)) 
                 {
-                    Log.WriteTrace(Log.TraceLevel.Success, "Fabric.Run", $"Actual IP '{actualIp}' is a valid IP.");
+                    Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.Run", $"Actual IP '{actualIp}' is a valid IP.");
                 }
                 else
                 {
-                    Log.WriteTrace(Log.TraceLevel.Success, "Fabric.Run", $"Did not find a valid IP for this computer.");
+                    Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.Run", $"Did not find a valid IP for this computer.");
                     return false;
                 }
 
 
                 // Check for a valid dyndns.dat locally. If not found, create an empty file.
                 // Load the stored IP from the data file.
-                Data.DataEngine dataEngine = new();
+                Data.DataEngine dataEngine = new(_maxLevel);
                 Data.DynDnsData dynDnsData = dataEngine.ReadDataFile(ExecDirectory);
 
 
@@ -63,22 +64,22 @@ namespace DynDns
                 // If equal, we don't need to do anything. return true.
                 if (actualIp.Equals(dynDnsData.CurrentIp))
                 {
-                    Log.WriteTrace(Log.TraceLevel.Success, "Fabric.Run", $"Actual IP '{actualIp}' is equal to stored IP '{dynDnsData.CurrentIp}'. No need for updates.");
+                    Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.Run", $"Actual IP '{actualIp}' is equal to stored IP '{dynDnsData.CurrentIp}'. No need for updates.");
                     return true;
                 }
                 else
                 {
-                    Log.WriteTrace(Log.TraceLevel.Success, "Fabric.Run", $"Actual IP '{actualIp}' differs from stored IP '{dynDnsData.CurrentIp}'. Need to update DNS servers and local data file.");
+                    Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.Run", $"Actual IP '{actualIp}' differs from stored IP '{dynDnsData.CurrentIp}'. Need to update DNS servers and local data file.");
                 }
 
 
                 // Update the AWS DNS server according with zone records read from zones.dat.
-                Zone.ZoneEngine zoneEngine = new();
+                Zone.ZoneEngine zoneEngine = new(_maxLevel);
                 List<Zone.ZoneRecord> zoneRecords = zoneEngine.LoadZones(ExecDirectory);
                 foreach(var zoneRecord in zoneRecords)
                 {
-                    Log.WriteTrace(Log.TraceLevel.Success, "Fabric.Run", $"Updating zone '{zoneRecord.ZoneId}', record '{zoneRecord.RecordName.Trim()}' with IP '{actualIp}'.");
-                    IpEngine ipEngine = new();
+                    Log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "Fabric.Run", $"Updating zone '{zoneRecord.ZoneId}', record '{zoneRecord.RecordName.Trim()}' with IP '{actualIp}'.");
+                    IpEngine ipEngine = new(_maxLevel);
                     ipEngine.ChangeResourceRecordSet(zoneRecord.ZoneId, zoneRecord.RecordName, actualIp, dynDnsData.CurrentIp);
                 }
 
@@ -92,7 +93,7 @@ namespace DynDns
             }
             catch (Exception ex)
             {
-                Log.WriteTrace(Log.TraceLevel.Error, "Fabric.Run", $"Error running Engine: ",ex);
+                Log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.Run", $"Error running Engine: ",ex);
                 throw;
             }
         }
