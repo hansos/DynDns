@@ -107,7 +107,7 @@ namespace DynDns
 
                 //Update the local data file with actual IP .
                 dynDnsData.CurrentIp = actualIp;
-                dataEngine.WriteDataFile(ExecDirectory, dynDnsData);
+                dataEngine.WriteDataFile(IpBufferPath(ipBuffer), dynDnsData);
 
 
                 return true;

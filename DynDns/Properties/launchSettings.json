@@ -2,7 +2,7 @@
   "profiles": {
     "DynDns": {
       "commandName": "Project",
-      "commandLineArgs": "--run -t=4 "
+      "commandLineArgs": "--test-run"
     }
   }
 }

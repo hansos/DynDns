@@ -7,7 +7,7 @@ namespace DynDns.Data
 {
     internal class DataEngine
     {
-        private const string _dataFileName = "dyndns.dat";
+        private const string _dataFileName = "ipbuffer.dat";
         private const string _keyCurrentIp = "currentip";
         private Log.TraceLevel _maxLevel;
         private readonly bool _quiet;
@@ -36,16 +36,37 @@ namespace DynDns.Data
                 StringBuilder sb = new();
                 sb.AppendLine($"{_keyCurrentIp}={dynDnsData.CurrentIp}");
                 File.WriteAllText(fullPath, sb.ToString());
-                _log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.NewOrDefault", $"Replaced data file '{fullPath}'.", _quiet);
+                _log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.WriteDataFile", $"Replaced data file '{fullPath}'.", _quiet);
                 return true;
             }
             catch (Exception ex)
             {
-                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
+                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.WriteDataFile", $"Error loading data file:", _quiet, ex);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Create a dummy IP Buffer file.
+        /// </summary>
+        /// <param name="dataFilePath"></param>
+        /// <returns></returns>
+        private bool CreateDummy(string dataFilePath)
+        {
+            try
+            {
+                StringBuilder sb = new();
+                sb.AppendLine($"{_keyCurrentIp}=0.0.0.0");
+                File.WriteAllText(dataFilePath, sb.ToString());
+                _log.WriteTrace(Log.TraceLevel.Warning, _maxLevel, "DataEngine.CreateDummy", $"New data file '{dataFilePath}' created.", _quiet);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.CreateDummy", $"Error creating data file:", _quiet, ex);
+                return false;
+            }
+        }
 
         /// <summary>
         /// Open an existing data file and add it's content to a DynDns object instance.
@@ -58,29 +79,30 @@ namespace DynDns.Data
             {
                 DynDnsData dynDnsData = new();
 
-                if (File.Exists(dataFilePath))
+                if (!File.Exists(dataFilePath))
                 {
-                    var lines = File.ReadAllLines(dataFilePath);
-                    foreach (var line in lines)
+                    bool success = CreateDummy(dataFilePath);
+                    if (!success)
                     {
-                        var lineParts = line.Split("=", 2);
-                        if (lineParts[0].ToLower().Equals(_keyCurrentIp))
-                        {
-                            dynDnsData.CurrentIp = lineParts[1];
-                        }
+                        return null;
                     }
-                    _log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{dataFilePath}' loaded.", _quiet);
-                    return dynDnsData;
                 }
-                else
+
+                var lines = File.ReadAllLines(dataFilePath);
+                foreach (var line in lines)
                 {
-                    _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Data file '{dataFilePath}' not found.", _quiet);
+                    var lineParts = line.Split("=", 2);
+                    if (lineParts[0].ToLower().Equals(_keyCurrentIp))
+                    {
+                        dynDnsData.CurrentIp = lineParts[1];
+                    }
                 }
-                return null;
+                _log.WriteTrace(Log.TraceLevel.Trace, _maxLevel, "DataEngine.ReadDataFile", $"Data file '{dataFilePath}' loaded.", _quiet);
+                return dynDnsData;
             }
             catch (Exception ex)
             {
-                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.NewOrDefault", $"Error loading data file:", _quiet, ex);
+                _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "DataEngine.ReadDataFile", $"Error loading data file:", _quiet, ex);
                 throw;
             }
         }
