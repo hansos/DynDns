@@ -56,7 +56,7 @@ namespace DynDns.Zone
                         washedLines.Add(new Zone.ZoneRecord
                         {
                             ZoneId = rec[0].Trim(),
-                            RecordName = rec[1].Trim()
+                            RecordName = NormalizeRecordName(rec[1]),
                         });
 
                     }
@@ -86,5 +86,14 @@ namespace DynDns.Zone
             }
         }
 
+        private string NormalizeRecordName(string recordName)
+        {
+            var s = recordName.Trim();
+            if (!s.EndsWith('.'))
+            {
+                s = s + ".";
+            }
+            return s;
+        }
     }
 }
