@@ -1,8 +1,10 @@
 # DynDns
 
-DynDns is a tool that updates an AWS Route 53 Hosted Zone record with a machine's global IP address.  
+**DynDns** is a tool that updates an **AWS Route 53 Hosted Zone record** with a machine's global IP address.  
 The tool can be a solution in cases where you want to use your own domain name to reach an internet server,  
-but where the server is in a network where the IP address changes over time.
+but where the server is in a network where the public IP address changes over time.
+
+It can thus be a replacement for other Dynamic DNS solutions in those cases where being able to use your own domain name is necessary.
 
 ## Requirements
 
@@ -15,7 +17,7 @@ but where the server is in a network where the IP address changes over time.
 
 ### On Linux servers
 
-The executable(s) must be installed in **/opt/dyndns** together with the **zones.dat** files.
+The executable(s) must be installed in */opt/dyndns* together with the *zones.dat* files.
 
 ### On Windows servers
 
@@ -27,14 +29,14 @@ The data file *zones.dat* files must be installed or created in the execution di
 ### IP Buffer
 
 The IP buffer file contains the latest valid global IP address. The file is updated each time the DNS is updated with new IP's.  
-As default, this file will be created in the execution directory and named  **ipbuffer.dat**.
-This path and name can be changed by using the **--ip-buffer-path**.
+As default, this file will be created in the execution directory and named  *ipbuffer.dat*.
+This path and name can be changed by using the *--ip-buffer-path*.
 
 ### Zone file
 
 A semicolon separated data file with all zone records that should be updated with the current IP of the computer.  
 The file must contain the AWS Zone ID  as well as the zone record name.
-The path and name can be changed by setting a value for the  **--run** or **--test-run** argument.
+The path and name can be changed by setting a value for the  *--run* or *--test-run* argument.
 
 Comment lines can be included at any place by starting the line with a hash (#). Comments cannot be added to record lines.
 
@@ -90,7 +92,7 @@ Z053464332EXGH6TGNB6C; esogame.myserver.net
 
 ### 2021-08-04 (V0.9.1)
 
-- Writing a log line to **ipchanges.log** when dyndns updates the DNS server.
+- Writing a log line to *ipchanges.log* when dyndns updates the DNS server.
 
 ### 2021-07-29 (V0.9.0)
 
