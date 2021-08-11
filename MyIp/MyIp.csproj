@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>67147751-ffc6-464f-8976-e4d9f3d5d9de</UserSecretsId>
+    <Version>0.9.0</Version>
+    <Authors>Hans Olav Sorteberg</Authors>
+    <Company>Toolkit Solutiuons AS</Company>
+    <Copyright>Copyright 2021 Hans Olav Sorteberg, All rights reserved.</Copyright>
+    <Description>Web service returning remote IP address.</Description>
+  </PropertyGroup>
+
+</Project>

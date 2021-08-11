@@ -11,6 +11,8 @@
     <AssemblyVersion>0.9.3.0</AssemblyVersion>
     <FileVersion>0.9.3.0</FileVersion>
     <Version>0.9.3</Version>
+    <Description>Dynamic DNS Updated for AWS</Description>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
