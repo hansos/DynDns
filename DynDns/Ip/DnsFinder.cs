@@ -7,11 +7,11 @@ namespace DynDns.Ip
     internal static class DnsFinder
     {
 
-        internal static string WhatismyipaddressCom(Log.TraceLevel maxLevel, bool quiet, Log log)
+        internal static string GetHtmlString(string url,  Log.TraceLevel maxLevel, bool quiet, Log log)
         {
             try
             {
-                string url = "http://bot.whatismyipaddress.com";
+                log.WriteTrace(Log.TraceLevel.Trace, maxLevel, "DnsFinder.GetHtmlString", $"Looking for IP at '{url}'.", quiet);
                 WebRequest req = WebRequest.Create(url);
                 WebResponse resp = req.GetResponse();
                 System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream());
@@ -20,30 +20,7 @@ namespace DynDns.Ip
             }
             catch (Exception ex)
             {
-                log.WriteTrace(Log.TraceLevel.Error, Log.TraceLevel.Error,"DnsFinder.WhatismyipaddressCom", $"Error finding public IP:", quiet, ex);
-                return null;
-            }
-        }
-
-
-        internal static string DynDnsOrg(Log.TraceLevel maxLevel, bool quiet, Log log)
-        {
-            try
-            {
-                string url = "http://checkip.dyndns.org";
-                WebRequest req = WebRequest.Create(url);
-                WebResponse resp = req.GetResponse();
-                System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream());
-                string response = sr.ReadToEnd().Trim();
-                string[] a = response.Split(':');
-                string a2 = a[1].Substring(1);
-                string[] a3 = a2.Split('<');
-                log.WriteTrace(Log.TraceLevel.Trace, maxLevel, "DnsFinder.MyPublicIp", $"IP retrieved from dyndns.org: '{a3[0]}'", quiet);
-                return a3[0];
-            }
-            catch (Exception ex)
-            {
-                log.WriteTrace(Log.TraceLevel.Error, maxLevel, "DnsFinder.DynDnsOrg", $"Error finding public IP:", quiet, ex);
+                log.WriteTrace(Log.TraceLevel.Error, maxLevel, "DnsFinder.GetHtmlString", $"Error finding public IP:", quiet, ex);
                 return null;
             }
         }
@@ -58,6 +35,7 @@ namespace DynDns.Ip
                     case System.Net.Sockets.AddressFamily.InterNetwork:
                         return true;
                     case System.Net.Sockets.AddressFamily.InterNetworkV6:
+                        // V6 is not tested, so we're returning false here for now.
                         return false;
                     default:
                         return false;

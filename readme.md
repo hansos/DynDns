@@ -13,6 +13,11 @@ It can thus be a replacement for other Dynamic DNS solutions in those cases wher
 - A Zone record for the domain and necessary zone records must be defined using the aws client or the aws web console.
 - The aws client must be installed on the machine, and should be initiated with Access Key and a secret key.
 
+## Limitations
+
+- The solution needs access to a web service returning your computer's public IP address.
+- The Only IPv4 are tested (and supported), but it should be a short way to fix this.
+
 ## Installation
 
 ### On Linux servers
@@ -55,6 +60,7 @@ Z053464332EXGH6TGNB6C; esogame.myserver.net
 |            | --help                | Display this help and exit.                   |
 |            | --version             | Output version information and exit.          |
 | -q         | --quiet               | Quiet mode. No output to console.             |
+| -u         | --url=URL             | The URL to webside returning your IP          |
 | -r         | --run=[PATH]          | Run the DNS update engine. Unless PATH to a data file is spesified,zones are read from the 'zones.dat' data file located together with the program file. |
 |            | --test-run=[PATH]     | Run the DNS update engine, bot don't write the IP address to the DNS zone record.Unless PATH to a data file is spesified, zones are read from the 'zones.dat' data file located together with the program file. |
 | -t         | --trace-level=LEVEL   | Set trace level for trace file. 0=nothing, 4=full trace. Values and codes accepted.                                   |
@@ -72,6 +78,10 @@ Z053464332EXGH6TGNB6C; esogame.myserver.net
 | 4     | TRACE | Trace messages (default) |
 
 ## Version history
+
+### 2021-08-10 (V0.9.4)
+
+- Address to service returning IP can now be defined using the --url argument.
 
 ### 2021-08-10 (V0.9.3)
 
@@ -100,6 +110,8 @@ Z053464332EXGH6TGNB6C; esogame.myserver.net
 
 ### Roadmap
 
+- Test and eventually fix to support IPv6. 
+- Consider defining a configuration file as an alternative for all the command line arguments.
 - ~~Submit path to data file directory as command line arguments.~~
 - ~~Submit path to log file directory as command line arguments.~~
 - ~~Add the final dot to zone record names automatically if not specified in the zones.dat file.~~

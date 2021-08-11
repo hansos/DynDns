@@ -21,6 +21,7 @@ namespace DynDns
             string ipBuffer = null;
             string logFilePath = null;
             string zoneFilePath = null;
+            string url = null;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -47,6 +48,14 @@ namespace DynDns
                         if (splitted.Length == 2)
                         {
                             zoneFilePath = splitted[1].Trim();
+                        }
+                    }
+                    else if (args[i].StartsWith("-u") || args[i].StartsWith("--url"))
+                    {
+                        var splitted = args[i].Split("=", StringSplitOptions.RemoveEmptyEntries);
+                        if (splitted.Length == 2)
+                        {
+                            url = splitted[1].Trim();
                         }
                     }
                     else if (args[i].StartsWith("--test-run"))
@@ -116,17 +125,19 @@ namespace DynDns
                 }
             }
 
-            if(testrun && run)
+            if (testrun && run)
             {
                 Output.ErrorText("Both --run and --test-run are specified. These arguments cannot be used in combination.");
+                return;
             }
 
             if (!testrun && !run)
             {
                 Output.ErrorText("One of the --run and --test-run arguments must be specified.");
+                return;
             }
 
-            var result = new Fabric(level, quiet, logFilePath).Run(run, ipBuffer, zoneFilePath );
+            var result = new Fabric(level, quiet, logFilePath).Run(url, run, ipBuffer, zoneFilePath );
 
 
         }

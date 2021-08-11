@@ -2,7 +2,7 @@
   "profiles": {
     "DynDns": {
       "commandName": "Project",
-      "commandLineArgs": "--test-run"
+      "commandLineArgs": "--test-run -u=http://myip.toolkit.no/MyIp"
     }
   }
 }

@@ -37,15 +37,23 @@ namespace DynDns
         /// If changed, update DNS server and stored addresses.
         /// </summary>
         /// <returns></returns>
-        internal bool Run(bool sharp, string ipBuffer, string zoneFilePath)
+        internal bool Run(string url, bool sharp, string ipBuffer, string zoneFilePath)
         {
             try
             {
 
+                // If a url is not registered, 
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    string msg = $"The --url argument is required. Please specify. ";
+                    _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.Run", msg, _quiet);
+                    return false;
+                }
+
                 // TODO: tracePath and _log confusing.
                 // Check if We can get our IP from a DynDns.org or other provider.
                 // If a valid IP is not received, return false.
-                string actualIp = DnsFinder.WhatismyipaddressCom(_maxLevel, _quiet, _log);
+                string actualIp = DnsFinder.GetHtmlString(url,_maxLevel, _quiet, _log);
                 if (DnsFinder.IsValidIpv4(actualIp)) 
                 {
                     string msg = $"Actual IP '{actualIp}' is a valid IP.";
