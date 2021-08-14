@@ -31,12 +31,12 @@ namespace DynDns.Data
         {
             try
             {
-                var fullPath = Path.Combine(dataFilePath, _dataFileName);
+                //var fullPath = Path.Combine(dataFilePath, _dataFileName);
 
                 StringBuilder sb = new();
                 sb.AppendLine($"{_keyCurrentIp}={dynDnsData.CurrentIp}");
-                File.WriteAllText(fullPath, sb.ToString());
-                _log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.WriteDataFile", $"Replaced data file '{fullPath}'.", _quiet);
+                File.WriteAllText(dataFilePath, sb.ToString());
+                _log.WriteTrace(Log.TraceLevel.Trace,_maxLevel, "DataEngine.WriteDataFile", $"Replaced data file '{dataFilePath}'.", _quiet);
                 return true;
             }
             catch (Exception ex)

@@ -79,6 +79,10 @@ Z053464332EXGH6TGNB6C; esogame.myserver.net
 
 ## Version history
 
+### 2021-08-14 (V0.9.5)
+
+- Fixed regression: Error updating ipbuffer-file after DNS server update.
+
 ### 2021-08-10 (V0.9.4)
 
 - Address to service returning IP can now be defined using the --url argument.

@@ -8,9 +8,9 @@
     <Company>Toolkit Solutiuons AS</Company>
     <Product>Dynamic DNS Client for AWS</Product>
     <Copyright>Copyright 2021 Hans Olav Sorteberg, All rights reserved.</Copyright>
-    <AssemblyVersion>0.9.3.0</AssemblyVersion>
-    <FileVersion>0.9.3.0</FileVersion>
-    <Version>0.9.3</Version>
+    <AssemblyVersion>0.9.5.0</AssemblyVersion>
+    <FileVersion>0.9.5.0</FileVersion>
+    <Version>0.9.5</Version>
     <Description>Dynamic DNS Updated for AWS</Description>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
