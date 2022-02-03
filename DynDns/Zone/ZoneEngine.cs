@@ -10,7 +10,7 @@ namespace DynDns.Zone
         private Log.TraceLevel _maxLevel;
         private readonly bool _quiet;
         private const string _zoneFileName = "zones.dat";
-        private const int _zoneIdLength = 21;
+        private const int _maxZoneIdLength = 32;
         private Log _log;
         public ZoneEngine(Log.TraceLevel maxLevel, bool quiet, Log log)
         {
@@ -47,9 +47,9 @@ namespace DynDns.Zone
                             return null;
                         }
 
-                        if (rec[0].Length != _zoneIdLength)
+                        if (rec[0].Length > _maxZoneIdLength)
                         {
-                            _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid. Zone ID must be {_zoneIdLength} characters long.", _quiet);
+                            _log.WriteTrace(Log.TraceLevel.Error, _maxLevel, "Fabric.LoadZones", $"Zone record '{line}' is not valid. Zone ID must be max {_maxZoneIdLength} characters long.", _quiet);
                             return null;
                         }
 
