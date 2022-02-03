@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace DynDns
 {
@@ -37,7 +38,7 @@ namespace DynDns
         /// If changed, update DNS server and stored addresses.
         /// </summary>
         /// <returns></returns>
-        internal bool Run(string url, bool sharp, string ipBuffer, string zoneFilePath)
+        internal async Task <bool> Run(string url, bool sharp, string ipBuffer, string zoneFilePath)
         {
             try
             {
@@ -53,7 +54,7 @@ namespace DynDns
                 // TODO: tracePath and _log confusing.
                 // Check if We can get our IP from a DynDns.org or other provider.
                 // If a valid IP is not received, return false.
-                string actualIp = DnsFinder.GetHtmlString(url,_maxLevel, _quiet, _log);
+                string actualIp = await DnsFinder.GetHtmlString(url,_maxLevel, _quiet, _log);
                 if (DnsFinder.IsValidIpv4(actualIp)) 
                 {
                     string msg = $"Actual IP '{actualIp}' is a valid IP.";

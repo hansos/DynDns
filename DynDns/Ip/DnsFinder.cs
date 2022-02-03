@@ -1,22 +1,25 @@
 ﻿using DynDns.Logging;
 using System;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace DynDns.Ip
 {
     internal static class DnsFinder
     {
 
-        internal static string GetHtmlString(string url,  Log.TraceLevel maxLevel, bool quiet, Log log)
+
+        internal static async Task<string> GetHtmlString(string url,  Log.TraceLevel maxLevel, bool quiet, Log log)
         {
             try
             {
+                HttpClient client = new();
                 log.WriteTrace(Log.TraceLevel.Trace, maxLevel, "DnsFinder.GetHtmlString", $"Looking for IP at '{url}'.", quiet);
-                WebRequest req = WebRequest.Create(url);
-                WebResponse resp = req.GetResponse();
-                System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream());
-                string response = sr.ReadToEnd().Trim();
-                return response;
+                var response = client.GetAsync(url);
+                response.Result.EnsureSuccessStatusCode();
+                string htmlString = await response.Result.Content.ReadAsStringAsync();
+                return htmlString;
             }
             catch (Exception ex)
             {
