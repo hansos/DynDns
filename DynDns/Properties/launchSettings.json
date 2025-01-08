@@ -2,7 +2,7 @@
   "profiles": {
     "DynDns": {
       "commandName": "Project",
-      "commandLineArgs": "--test-run -u=http://myip.toolkit.no/MyIp"
+      "commandLineArgs": "--run -u=https://myhddhth1g.execute-api.eu-north-1.amazonaws.com/default/MyIP"
     }
   }
 }

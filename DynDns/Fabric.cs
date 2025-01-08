@@ -55,6 +55,7 @@ namespace DynDns
                 // Check if We can get our IP from a DynDns.org or other provider.
                 // If a valid IP is not received, return false.
                 string actualIp = await DnsFinder.GetHtmlString(url,_maxLevel, _quiet, _log);
+                actualIp = actualIp.Trim('\"');
                 if (DnsFinder.IsValidIpv4(actualIp)) 
                 {
                     string msg = $"Actual IP '{actualIp}' is a valid IP.";
@@ -176,7 +177,7 @@ namespace DynDns
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    return "/opt/dyndns";
+                    return "/opt/nersten/dyndns";
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {

@@ -19,43 +19,14 @@ namespace DynDns.Ip
             _log = log;
         }
 
-        /// <summary>
-        /// If detected address differs from stored address, the new IP address is returned.
-        /// On error or unchanged value, null is returned.
-        /// </summary>
-        /// <returns>
-        /// New IP address or null.
-        /// </returns>
-        //internal string CorrectPublicIp(Data.DynDnsData dynDnsData)
-        //{
-        //    var currentIp = DnsFinder.WhatismyipaddressCom(_maxLevel, _quiet);
-
-        //    if(currentIp == null)
-        //    {
-        //        _log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "IpEngine.CorrectPublicIp", $"Could not detect IP address.", _quiet);
-        //        return null;
-        //    }
-        //    else if(currentIp != null && dynDnsData.CurrentIp.Equals(currentIp ))
-        //    {
-        //        return null;
-        //    }
-        //    else if (currentIp != null)
-        //    {
-        //        return currentIp;
-        //    }
-
-        //    //Log.WriteLine($"Reading data files from '{execDir}'.");
-
-        //    return null;
-        //}
-
 
         internal bool ChangeResourceRecordSet(string hostedZoneId, string recName, string ip, string currentIp, bool sharp = true )
         {
             try
             {
 
-                using (var r53 = new AmazonRoute53Client())
+                var settings = Infrastruct.SettingsTools.LoadSettings();
+                using (var r53 = new AmazonRoute53Client(settings.AwsSettings.AccessKeyId, settings.AwsSettings.SecretAccessKey, Amazon.RegionEndpoint.USEast1))
                 {
                     var recordSet = CreateResourceRecordSet(recName, ip, RRType.A);
                     _log.WriteTrace(Log.TraceLevel.Success, _maxLevel, "AWS.ChangeResourceRecordSet", $"Resource Record set defined for zone {hostedZoneId}: Record name = '{recName}', IP = '{ip}'", _quiet);
