@@ -1,6 +1,4 @@
-
 import json
-
 def lambda_handler(event, context):
     ip = event['requestContext']['identity']['sourceIp']
     response = {
