@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynDns", "DynDns\DynDns.csproj", "{547A01AB-CC33-4EF8-B2AD-376DE6427B9E}"
 EndProject
@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyIp", "MyIp\MyIp.csproj", "{7FA48F0B-EDA8-47BB-858D-34C03243A1B9}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "MyIp_py", "MyIp_py\MyIp_py.pyproj", "{D4CA5D2F-029C-4FA3-8A94-4FA72429DF38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,8 @@ Global
 		{7FA48F0B-EDA8-47BB-858D-34C03243A1B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FA48F0B-EDA8-47BB-858D-34C03243A1B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FA48F0B-EDA8-47BB-858D-34C03243A1B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4CA5D2F-029C-4FA3-8A94-4FA72429DF38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4CA5D2F-029C-4FA3-8A94-4FA72429DF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
