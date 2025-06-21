@@ -1,6 +1,3 @@
 ﻿# Valid format: HostedZoneId; RecordName;
-Z05346433GDXGH3DVNB6C; gameserver1.esogame.net
-Z05346433GDXGH3DVNB6C; esogame.net
-Z0871446XRU1NAR5F8CM; nersten.net
-Z07459852KUDBZ5I2WXN4; beepandshop.com
-Z04692201N9DLJGFCF5FJ; recordranger.com
+Z00000000000000000000; mydomain.net
+Z00000000000000000001; mydomain.com
